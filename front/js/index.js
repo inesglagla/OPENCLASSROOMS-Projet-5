@@ -1,32 +1,35 @@
 //Placer le script suivant dans la section "items"
-const produitsList = document.getElementById("items");
+const productsList = document.getElementById("items");
 //La fonction "fetch" pour récupérer les données des produits pour l'index.html et les positionner
 fetch("http://localhost:3000/api/products")
+    //Convertir les données en .json
     .then ((response) => response.json())
-    .then((produits) => {
-        for (let i = 0; i < produits.length; i++) {
+    //Récupérer les données des produits
+    .then((products) => {
+        //products.length permet d'afficher tous les produits en un seul exemplaire
+        for (let i = 0; i < products.length; i++) {
             //Création d'un lien pour voir le produit en lui-même
-            let produitsLink = document.createElement("a");
-            produitsLink.setAttribute("href", `product.html?id=${produits[i]._id}`);
-            produitsList.appendChild(produitsLink);
+            let productsLink = document.createElement("a");
+            productsLink.setAttribute("href", `product.html?id=${products[i]._id}`);
+            productsList.appendChild(productsLink);
             //Article conteneur pour le produit
-            let produitsArticle = document.createElement ("article");
-            produitsLink.appendChild(produitsArticle);
+            let productsArticle = document.createElement ("article");
+            productsLink.appendChild(productsArticle);
             //Image du produit et le texte alternatif
-            let produitsIMG = document.createElement("img");
-            produitsIMG.setAttribute("src", produits[i].imageURL);
-            produitsIMG.setAttribute("alt", produits[i].altTxt);
-            produitsArticle.appendChild(produitsIMG);
+            let productsIMG = document.createElement("img");
+            productsIMG.setAttribute("src", products[i].imageUrl);
+            productsIMG.setAttribute("alt", products[i].altTxt);
+            productsArticle.appendChild(productsIMG);
             //Nom du produit
-            let produitsName = document.createElement("h3");
-            produitsName.classList.add("produitsName");
-            produitsName.textContent = produits[i].name;
-            produitsArticle.appendChild(produitsName);
+            let productsName = document.createElement("h3");
+            productsName.classList.add("productsName");
+            productsName.textContent = products[i].name;
+            productsArticle.appendChild(productsName);
             //Description du produit
-            let produitsDescription = document.createElement("p");
-            produitsDescription.classList.add("produitsDescription");
-            produitsDescription.textContent = produits[i].description;
-            produitsArticle.appendChild(produitsDescription);
+            let productsDescription = document.createElement("p");
+            productsDescription.classList.add("productsDescription");
+            productsDescription.textContent = products[i].description;
+            productsArticle.appendChild(productsDescription);
         }
     })
     //Message d'erreur
@@ -35,5 +38,5 @@ fetch("http://localhost:3000/api/products")
         let errorMessage = document.createElement("h3");
         errorMessage.textContent = "Il y a un problème technique. Veuillez réessayer ultérieurement.";
         errorMessage.style.textAlign = "center";
-        produitsList.appendChild(errorMessage);
+        productsList.appendChild(errorMessage);
     });
