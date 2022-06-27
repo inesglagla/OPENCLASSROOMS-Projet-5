@@ -69,20 +69,20 @@ fetch('http://localhost:3000/api/products/'+id)
             productQuantity : productQuantityAll
             }
             //Ajout dans du produit dans le localStorage, avec un array servant de panier
-            let addProductCart = JSON.parse(localStorage.getItem("Panier"));
+            let addProductCart = JSON.parse(localStorage.getItem("panier"));
             //Condition si une couleur et une quantité n'ont pas été choisies
             if (productQuantityAll == undefined || productQuantityAll < 1 || productQuantityAll > 100 || colorItem == undefined || productQuantityAll && colorItem == undefined) {
                 alert('Il faut choisir une quantité entre 1 et 100! Il faut aussi choisir une couleur!');
             //Si le panier n'existe pas, on le crée avec le premier produit
-            } else if (addProductCart == null) {
+            } else if (addProductCart == null || addProductCart == 0) {
                     addProductCart = [];
                     addProductCart.push(productData);
-                    localStorage.setItem("Panier", JSON.stringify(addProductCart));
+                    localStorage.setItem("panier", JSON.stringify(addProductCart));
                     console.log(addProductCart);
             //Si le panier existe, on suit la condition suivante
             } else {
                     //Variable pour montrer que le panier existe et contient un produit au minimum
-                    productsAdded = JSON.parse(localStorage.getItem("Panier"));
+                    productsAdded = JSON.parse(localStorage.getItem("panier"));
                     if (productsAdded) {
                         for (let choice of productsAdded) {
                             //On vérifie si l'ID du produit et sa couleur existent déjà dans le panier
@@ -91,11 +91,11 @@ fetch('http://localhost:3000/api/products/'+id)
                                 let addQuantity = parseInt(choice.productQuantity) + parseInt(productQuantityAll);
                                 choice.productQuantity = JSON.stringify(addQuantity);
                                 console.log("On a ajouté la nouvelle quantité");
-                                return (localStorage.Panier = JSON.stringify(productsAdded));
+                                return (localStorage.panier = JSON.stringify(productsAdded));
                         } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
-                        else (addProductCart == true); {
+                        else (addProductCart); {
                         addProductCart.push(productData);
-                        localStorage.setItem("Panier", JSON.stringify(addProductCart));
+                        localStorage.setItem("panier", JSON.stringify(addProductCart));
                         console.log("On a ajouté le nouveau produit")
                         }
                     }
