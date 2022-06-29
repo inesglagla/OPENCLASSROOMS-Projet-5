@@ -82,7 +82,7 @@ fetch('http://localhost:3000/api/products/'+id)
             //Si le panier existe, on suit la condition suivante
             } else {
                     //Variable pour montrer que le panier existe et contient un produit au minimum
-                    productsAdded = JSON.parse(localStorage.getItem("panier"));
+                    let productsAdded = JSON.parse(localStorage.getItem("panier"));
                     if (productsAdded) {
                         for (let choice of productsAdded) {
                             //On vérifie si l'ID du produit et sa couleur existent déjà dans le panier
@@ -92,12 +92,12 @@ fetch('http://localhost:3000/api/products/'+id)
                                 choice.productQuantity = JSON.stringify(addQuantity);
                                 console.log("On a ajouté la nouvelle quantité");
                                 return (localStorage.panier = JSON.stringify(productsAdded));
-                        } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
-                        else (addProductCart); {
-                        addProductCart.push(productData);
-                        localStorage.setItem("panier", JSON.stringify(addProductCart));
-                        console.log("On a ajouté le nouveau produit")
-                        }
+                            } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
+                            else {
+                            addProductCart.push(productData);
+                            localStorage.setItem("panier", JSON.stringify(addProductCart));
+                            console.log("On a ajouté le nouveau produit")
+                            }
                     }
                 }
             }
