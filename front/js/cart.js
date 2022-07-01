@@ -27,25 +27,51 @@ async function displayCart() {
     elem.setAttribute("data-color", localItems[i].productColor);
     elem.innerHTML = `
     <div class="cart__item__img">
-    <img src="${data.imageUrl}" alt="${data.altTxt}">
-    </div>
-    <div class="cart__item__content">
-    <div class="cart__item__content__description">
-    <h2>${data.name}</h2>
-    <p>${localItems[i].productColor}</p>
-    <p>${data.price} €</p></div>
-    <div class="cart__item__content__settings">
-    <div class="cart__item__content__settings__quantity">
-    <p>Qté : </p>
-    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${localItems[i].productQuantity}>
-    </div>
-    <div class="cart__item__content__settings__delete">
-    <p class="deleteItem">Supprimer</p>
-    </div>
-    </div>
-    </div>
-    `
+      <img src="${data.imageUrl}" alt="${data.altTxt}">
+        </div>
+            <div class="cart__item__content">
+              <div class="cart__item__content__description">
+                <h2>${data.name}</h2>
+                <p>${localItems[i].productColor}</p>
+                <p>${data.price} €</p></div>
+              <div class="cart__item__content__settings">
+                  <div class="cart__item__content__settings__quantity">
+                    <p>Qté : </p>
+                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${localItems[i].productQuantity}>
+                </div>
+              <div class="cart__item__content__settings__delete">
+              <p class="deleteItem">Supprimer</p>
+            </div>
+        </div>
+      </div>`
     document.getElementById("cart__items").appendChild(elem);
+    const productPrice = data.price;
+    //Fonction qui affiche le prix et la quantité total de produits dans le panier
+    function showTotal () {
+      //Affichage de la quantité totale
+      //On crée une variable pour la quantité issue du localstorage et une variable pour la quantité totale
+      let totalAffichage = document.getElementsByClassName("itemQuantity");
+      let totalQuantity = 0;
+      for (let i = 0; i < totalAffichage.length; ++i) {
+        totalQuantity += totalAffichage[i].valueAsNumber;
+      }
+      //On affiche la quantité additionnée
+      let quantityPlacement = document.getElementById("totalQuantity");
+      quantityPlacement.innerHTML = totalQuantity;
+      console.log(totalQuantity);
+
+      //Affichage du prix total
+      //Variable pour le prix total
+      let totalPrice = 0;
+      for (let i = 0; i < totalAffichage.length; ++i) {
+        //On récupère le prix total en prenant en compte la quantité de chaque produit
+        totalPrice += (totalAffichage[i].valueAsNumber * productPrice);
+      }
+      //On affiche le prix total récupéré
+      let pricePlacement = document.getElementById("totalPrice");
+      pricePlacement.innerHTML = totalPrice;
+      console.log(totalPrice);
+    }
   }
   showTotal();
   deleteProduct(); 
@@ -55,33 +81,6 @@ async function displayCart() {
 displayCart();
 formulaire();
 sendOrder()
-
-//Fonction qui affiche le prix et la quantité total de produits dans le panier
-function showTotal () {
-  //Affichage de la quantité totale
-  //On crée une variable pour la quantité issue du localstorage et une variable pour la quantité totale
-  let totalAffichage = document.getElementsByClassName("itemQuantity");
-  let totalQuantity = 0;
-  for (let i = 0; i < totalAffichage.length; ++i) {
-    totalQuantity += totalAffichage[i].valueAsNumber;
-  }
-  //On affiche la quantité additionnée
-  let quantityPlacement = document.getElementById("totalQuantity");
-  quantityPlacement.innerHTML = totalQuantity;
-  console.log(totalQuantity);
-
-  //Affichage du prix total
-  //Variable pour le prix total
-  let totalPrice = 0;
-  for (let i = 0; i < totalAffichage.length; ++i) {
-    //On récupère le prix total en prenant en compte la quantité de chaque produit
-    totalPrice += (totalAffichage[i].valueAsNumber * localItems[i].price);
-  }
-  //On affiche le prix total récupéré
-  let pricePlacement = document.getElementById("totalPrice");
-  pricePlacement.innerHTML = totalPrice;
-  console.log(totalPrice);
-}
 
 //Fonction pour supprimer un produit du panier
 function deleteProduct() {
