@@ -73,10 +73,13 @@ const positionCart = document.querySelector("#cart__items");
           `)
         }
         }}}
+      //Fonctions activées
       displayCart();   
       deleteProduct();    
       changeQuantity();
       showTotal();
+      formulaire();
+      sendOrder()
       })
       //Message d'erreur
       .catch((error) => {
@@ -126,65 +129,104 @@ function changeQuantity() {
   }
 }
 
+//Tableau principal pour le formulaire
+let client = {};
+//Fonction pour le formulaire
+function formulaire() {
+  //Appliquer une variable au bouton qui sert à valider le formulaire
+  let buttonValidation = document.getElementById("order");
+  buttonValidation.addEventListener("click", (event) => {
+    event.preventDefault();
+    //Tableau contenant les données du client
+    let client = {
+      firstName: document.querySelector("#firstName").value,
+      lastName: document.querySelector("#lastName").value,
+      address: document.querySelector("#address").value,
+      city: document.querySelector("#city").value,
+      email: document.querySelector("#email").value
+    };
+    console.log(client);
+    //Utilisation de regex pour vérifier les données entrées dans les champs du formulation
+    //Conditions pour le nom, le prénom et la ville
+    const regExAllNameTown = (value) => {
+      return /^[A-Z][A-Za-z\é\è\ê\-]+$/.test(value);
+    }
+    //Conditions pour l'adresse
+    const regExAddress = (value) => {
+      return /^[a-zA-Z0-9.,-_ ]{5,50}[ ]{0,2}$/.test(value);
+    }
+    //Conditions pour l'e-mail
+    const regExEmail = (value) => {
+      return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(value);
+    }
 
+    //Vérification pour le prénom
+    function firstNameValid() {
+      const firstNameValidity = client.firstName;
+      if (regExAllNameTown(firstNameValidity)) {
+        console.log("Le prénom est valide!");
+        return true
+      } else {
+        console.log("Le prénom n'est pas valide!");
+        return false;
+      }
+    }
+    //Vérification du nom
+    function lastNameValid() {
+      const lastNameValidity = client.lastName;
+      if (regExAllNameTown(lastNameValidity)) {
+        console.log("Le nom est valide!");
+        return true
+      } else {
+        console.log("Le nom n'est pas valide!");
+        return false;
+      }
+    }
+    //Vérification de la ville
+    function cityValid() {
+      const cityValidity = client.city;
+      if (regExAllNameTown(cityValidity)) {
+        console.log("La ville est valide!");
+        return true
+      } else {
+        console.log("La ville n'est pas valide!");
+        return false;
+      }
+    }
+    //Vérification de l'adresse
+    function addressValid() {
+      const addressValidity = client.address;
+      if (regExAddress(addressValidity)) {
+        console.log("L'adresse est valide!");
+        return true
+      } else {
+        console.log("L'adresse n'est pas valide!");
+        return false;
+      }
+    }
+    //Vérification de l'email
+    function emailValid() {
+      const emailValidity = client.email;
+      if (regExEmail(emailValidity)) {
+        console.log("L'email est valide!");
+        return true
+      } else {
+        console.log("L'email n'est pas valide!");
+        return false;
+      }
+    }
 
-/* CONSERVER
-//On donne à une variable le contenu de notre panier
-let addProduct = JSON.parse(localStorage.getItem("panier"));
-console.table(addProduct);
-const positionCart = document.querySelector("#cart__items");
-
-//On fait appel à l'API pour récupérer les données
-function apiCart () {
-  fetch(`http://localhost:3000/api/products/`)
-      .then ((response) => response.json())
-      .then (function (cart) {
-        console.table(cart);
-        //On fait appel à la fonction du panier
-        displayCart();
-      })
-      //Message d'erreur
-      .catch((error) => {
-        console.log("Il y a un soucis avec le panier :" + error);
-      });
+    //On vérifie si le formulaire est validé
+    if (firstNameValid() && lastNameValid() && cityValid() && addressValid() && emailValid) {
+      console.log("C'est bon!");
+    } else {
+      //Si le formulaire n'est pas valide
+      console.log("Il faut remplir le formulaire!");
+    }
+  })
 }
-apiCart ();
 
-//Fonction unique qui s'applique à chaque produit
-function displayCart() {
-//Si le panier est vide, on affiche un message
-if (addProduct === null || addProduct == 0) {
-    const emptyCart = `<h2>Votre panier est vide. Veuillez le remplir.</h2>`;
-    positionCart.innerHTML = emptyCart;
-} else {
-//Si un produit se trouve dans le localstorage, on affiche le panier
-//Boucle qui doit s'appliquer à chaque produit
-for (i = 0; i < addProduct.length; i++) {
-  //Structure propre à chaque produit
-  positionCart.innerHTML = addProduct.map(() => `
-  <article class="cart__item" data-id="${addProduct[i].productID}" data-color="${addProduct.productColor}">
-          <div class="cart__item__img">
-            <img src="${addProduct[i].imageUrl}" alt="${addProduct[i].altTxt}">
-          </div>
-          <div class="cart__item__content">
-            <div class="cart__item__content__description">
-              <h2>${addProduct[i].name}</h2>
-              <p>${addProduct[i].productColor}</p>
-              <p>${addProduct[i].price}</p>
-            </div>
-            <div class="cart__item__content__settings">
-              <div class="cart__item__content__settings__quantity">
-                <p>Qté : </p>
-                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${addProduct[i].productQuantity}">
-              </div>
-              <div class="cart__item__content__settings__delete">
-                <p class="deleteItem">Supprimer</p>
-              </div>
-            </div>
-          </div>
-        </article>
-  `)
+//Envoie des données
+function sendOrder() {
+
 }
-}}
-displayCart();
-*/
