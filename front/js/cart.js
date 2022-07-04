@@ -77,11 +77,7 @@ async function displayCart() {
   deleteProduct(); 
   changeQuantity();
 }
-
 displayCart();
-formulaire();
-sendOrder()
-
 //Fonction pour supprimer un produit du panier
 function deleteProduct() {
   let btn_supprimer = document.querySelectorAll(".deleteItem");
@@ -128,102 +124,138 @@ function changeQuantity() {
 
 //Tableau principal pour le formulaire
 let client = {};
-//Fonction pour le formulaire
-function formulaire() {
-  //Appliquer une variable au bouton qui sert à valider le formulaire
-  let buttonValidation = document.getElementById("order");
-  buttonValidation.addEventListener("click", (event) => {
-    event.preventDefault();
+//Partie du formulaire
+//Utilisation de regex pour vérifier les données entrées dans les champs du formulation
+//Conditions pour le nom, le prénom et la ville
+const regExAllNameTown = (value) => {
+  return /^[A-Z][A-Za-z\é\è\ê\-]+$/.test(value);
+}
+//Conditions pour l'adresse
+const regExAddress = (value) => {
+  return /^[a-zA-Z0-9.,-_ ]{5,50}[ ]{0,2}$/.test(value);
+}
+//Conditions pour l'e-mail
+const regExEmail = (value) => {
+  return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(value);
+}
+//Appliquer une variable au bouton qui sert à valider le formulaire
+let buttonValidation = document.querySelector("#order");
+buttonValidation.addEventListener("click", (event) => {
+  let client = {
+    firstName: document.querySelector("#firstName").value,
+    lastName: document.querySelector("#lastName").value,
+    address: document.querySelector("#address").value,
+    city: document.querySelector("#city").value,
+    email: document.querySelector("#email").value
+  };
+  event.preventDefault();
+
+  //Vérification pour le prénom
+  function firstNameValid() {
+    const firstNameValidity = client.firstName;
+    let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+    if (regExAllNameTown(firstNameValidity)) {
+      firstNameErrorMsg.innerHTML = '';
+      return true
+    } else {
+      firstNameErrorMsg.innerHTML = 'Information manquante ou invalide.';
+      return false;
+    }
+  }
+  //Vérification du nom
+  function lastNameValid() {
+    const lastNameValidity = client.lastName;
+    let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+    if (regExAllNameTown(lastNameValidity)) {
+      lastNameErrorMsg.innerHTML = '';
+      return true
+    } else {
+      lastNameErrorMsg.innerHTML = 'Information manquante ou invalide.';
+      return false;
+    }
+  }
+  //Vérification de la ville
+  function cityValid() {
+    const cityValidity = client.city;
+    let cityErrorMsg = document.getElementById("cityErrorMsg");
+    if (regExAllNameTown(cityValidity)) {
+      cityErrorMsg.innerHTML = '';
+      return true
+    } else {
+      cityErrorMsg.innerHTML = 'Information manquante ou invalide.';
+      return false;
+    }
+  }
+  //Vérification de l'adresse
+  function addressValid() {
+    const addressValidity = client.address;
+    let addressErrorMsg = document.getElementById("addressErrorMsg");
+    if (regExAddress(addressValidity)) {
+      addressErrorMsg.innerHTML = '';
+      return true
+    } else {
+      addressErrorMsg.innerHTML = 'Information manquante ou invalide.';
+      return false;
+    }
+  }
+  //Vérification de l'email
+  function emailValid() {
+    const emailValidity = client.email;
+    let emailErrorMsg = document.getElementById("emailErrorMsg");
+    if (regExEmail(emailValidity)) {
+      emailErrorMsg.innerHTML = '';
+      return true
+    } else {
+      emailErrorMsg.innerHTML = 'Information manquante ou invalide.';
+      return false;
+    }
+  }
+
+  //On vérifie si le formulaire est validé
+  if (firstNameValid() && lastNameValid() && cityValid() && addressValid() && emailValid()) {
+    //On envoie les données
+    console.log("Envoie des données!");
+    //Récupération des produits dans le panier
+    let idProducts = [];
+    let data = getLocalProduct();
+    for (let i = 0; data[i]; i++)
+      idProducts.push(data[i].id);
     //Tableau contenant les données du client
-    let client = {
+    const order = {
+    client: {
       firstName: document.querySelector("#firstName").value,
       lastName: document.querySelector("#lastName").value,
       address: document.querySelector("#address").value,
       city: document.querySelector("#city").value,
       email: document.querySelector("#email").value
+    },
+    products: idProducts
+  }
+  console.log(order);
+    //Envoie des données au serveur
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(order),
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json"
+      },
     };
-    console.log(client);
-    //Utilisation de regex pour vérifier les données entrées dans les champs du formulation
-    //Conditions pour le nom, le prénom et la ville
-    const regExAllNameTown = (value) => {
-      return /^[A-Z][A-Za-z\é\è\ê\-]+$/.test(value);
-    }
-    //Conditions pour l'adresse
-    const regExAddress = (value) => {
-      return /^[a-zA-Z0-9.,-_ ]{5,50}[ ]{0,2}$/.test(value);
-    }
-    //Conditions pour l'e-mail
-    const regExEmail = (value) => {
-      return /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/.test(value);
-    }
-
-    //Vérification pour le prénom
-    function firstNameValid() {
-      const firstNameValidity = client.firstName;
-      if (regExAllNameTown(firstNameValidity)) {
-        console.log("Le prénom est valide!");
-        return true
-      } else {
-        console.log("Le prénom n'est pas valide!");
-        return false;
-      }
-    }
-    //Vérification du nom
-    function lastNameValid() {
-      const lastNameValidity = client.lastName;
-      if (regExAllNameTown(lastNameValidity)) {
-        console.log("Le nom est valide!");
-        return true
-      } else {
-        console.log("Le nom n'est pas valide!");
-        return false;
-      }
-    }
-    //Vérification de la ville
-    function cityValid() {
-      const cityValidity = client.city;
-      if (regExAllNameTown(cityValidity)) {
-        console.log("La ville est valide!");
-        return true
-      } else {
-        console.log("La ville n'est pas valide!");
-        return false;
-      }
-    }
-    //Vérification de l'adresse
-    function addressValid() {
-      const addressValidity = client.address;
-      if (regExAddress(addressValidity)) {
-        console.log("L'adresse est valide!");
-        return true
-      } else {
-        console.log("L'adresse n'est pas valide!");
-        return false;
-      }
-    }
-    //Vérification de l'email
-    function emailValid() {
-      const emailValidity = client.email;
-      if (regExEmail(emailValidity)) {
-        console.log("L'email est valide!");
-        return true
-      } else {
-        console.log("L'email n'est pas valide!");
-        return false;
-      }
-    }
-
-    //On vérifie si le formulaire est validé
-    if (firstNameValid() && lastNameValid() && cityValid() && addressValid() && emailValid) {
-      console.log("C'est bon!");
-    } else {
-      //Si le formulaire n'est pas valide
-      console.log("Il faut remplir le formulaire!");
-    }
-  })
-}
-
-//Envoie des données
-function sendOrder() {
-
-}
+    //Utilisation d'un fetch order pour renvoyer les données dans un nouveau tableau dans le localstorage
+    fetch("http://localhost:3000/api/products/order", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        localStorage.clear();
+        localStorage.setItem("order", data.order);
+        //On renvoie le client à la page de confirmation pour qu'il récupère son numéro de commande
+        document.location.href = "confirmation.html";
+      })
+      //Message d'erreur
+      .catch((error) => {
+        alert("Il y a un problème avec le fetch-order : " + error.message);
+      });
+  } else {
+    console.log("Le formulaire n'est pas valide!");
+  }
+})
