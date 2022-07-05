@@ -217,9 +217,8 @@ buttonValidation.addEventListener("click", (event) => {
     console.log("Envoie des données!");
     //Récupération des produits dans le panier
     let idProducts = [];
-    let data = getLocalProduct();
-    for (let i = 0; data[i]; i++)
-      idProducts.push(data[i].id);
+    for (let i = 0; i < showCart.length; i++)
+      idProducts.push(showCart[i].productID);
     //Tableau contenant les données du client
     const order = {
     contact: {
@@ -247,7 +246,7 @@ buttonValidation.addEventListener("click", (event) => {
       .then((data) => {
         console.log(data);
         localStorage.clear();
-        localStorage.setItem("order", data.order);
+        localStorage.setItem("orderId", data.orderId);
         //On renvoie le client à la page de confirmation pour qu'il récupère son numéro de commande
         document.location.href = "confirmation.html";
       })
