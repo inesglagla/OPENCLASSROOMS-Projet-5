@@ -222,7 +222,7 @@ buttonValidation.addEventListener("click", (event) => {
       idProducts.push(data[i].id);
     //Tableau contenant les données du client
     const order = {
-    client: {
+    contact: {
       firstName: document.querySelector("#firstName").value,
       lastName: document.querySelector("#lastName").value,
       address: document.querySelector("#address").value,
