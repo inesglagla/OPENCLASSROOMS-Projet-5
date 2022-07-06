@@ -68,7 +68,7 @@ fetch('http://localhost:3000/api/products/'+id)
             productColor : colorItem,
             productQuantity : productQuantityAll
             }
-            //Ajout dans du produit dans le localStorage, avec un array servant de panier
+            //Ajout dans du produit dans le localStorage, dans un array servant de panier
             let addProductCart = JSON.parse(localStorage.getItem("panier"));
             //Condition si une couleur et une quantité n'ont pas été choisies
             if (productQuantityAll == undefined || productQuantityAll < 1 || productQuantityAll > 100 || colorItem == undefined || productQuantityAll && colorItem == undefined) {
@@ -84,21 +84,22 @@ fetch('http://localhost:3000/api/products/'+id)
                     //Variable pour montrer que le panier existe et contient un produit au minimum
                     let productsAdded = JSON.parse(localStorage.getItem("panier"));
                     if (productsAdded) {
-                        for (let choice of productsAdded) {
-                            //On vérifie si l'ID du produit et sa couleur existent déjà dans le panier
-                            if (choice.productID == products._id && choice.productColor == colorItem) {
-                                //Si ils sont pareils, on ajoute uniquement la quantité au panier
-                                let addQuantity = parseInt(choice.productQuantity) + parseInt(productQuantityAll);
-                                choice.productQuantity = JSON.stringify(addQuantity);
-                                console.log("On a ajouté la nouvelle quantité");
-                                return (localStorage.panier = JSON.stringify(productsAdded));
-                            } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
-                            else {
-                            addProductCart.push(productData);
-                            localStorage.setItem("panier", JSON.stringify(addProductCart));
-                            console.log("On a ajouté le nouveau produit")
-                            }
-                    }
+                        const productFind = productsAdded.find(
+                            (choice) => choice.productID === products._id && choice.productColor === colorItem);
+                            //Si le produit commandé est déjà dans le panier
+                            if (productFind) {
+                            //Si ils sont pareils, on ajoute uniquement la quantité au panier
+                            let addQuantity = parseInt(productData.productQuantity) + parseInt(productFind.productQuantity);
+                            productFind.productQuantity = JSON.stringify(addQuantity);
+                            console.log("On a ajouté la nouvelle quantité");
+                            return (localStorage.panier = JSON.stringify(productsAdded));
+                        } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
+                        else {
+                        addProductCart.push(productData);
+                        localStorage.setItem("panier", JSON.stringify(addProductCart));
+                        console.log("On a ajouté le nouveau produit")
+                        }
+                    
                 }
             }
         })
