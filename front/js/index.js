@@ -12,7 +12,7 @@ fetch("http://localhost:3000/api/products")
             let productsLink = document.createElement("a");
             productsLink.setAttribute("href", `product.html?id=${products[i]._id}`);
             productsList.appendChild(productsLink);
-            //Article conteneur pour le produit
+            //Article contenant le produit
             let productsArticle = document.createElement ("article");
             productsLink.appendChild(productsArticle);
             //Image du produit et le texte alternatif

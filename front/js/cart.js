@@ -58,7 +58,6 @@ async function displayCart() {
       //On affiche la quantité additionnée
       let quantityPlacement = document.getElementById("totalQuantity");
       quantityPlacement.innerHTML = totalQuantity;
-      console.log(totalQuantity);
 
       //Affichage du prix total
       //Variable pour le prix total
@@ -70,7 +69,6 @@ async function displayCart() {
       //On affiche le prix total récupéré
       let pricePlacement = document.getElementById("totalPrice");
       pricePlacement.innerHTML = totalPrice;
-      console.log(totalPrice);
     }
   }
   showTotal();
@@ -85,7 +83,6 @@ function deleteProduct() {
   for (let i = 0; i < btn_supprimer.length; i++){
     //On supprime le produit à l'aide du bouton "supprimer"
       btn_supprimer[i].addEventListener("click", (event) => {
-          console.log("On a cliqué!");
           event.preventDefault();
           //On supprime le produit en se basant sur son ID et sa couleur, on crée donc deux variables
           let idDelete = showCart[i].productID;
@@ -214,7 +211,6 @@ buttonValidation.addEventListener("click", (event) => {
   //On vérifie si le formulaire est validé
   if (firstNameValid() && lastNameValid() && cityValid() && addressValid() && emailValid()) {
     //On envoie les données
-    console.log("Envoie des données!");
     //Récupération des produits dans le panier
     let idProducts = [];
     for (let i = 0; i < showCart.length; i++)
@@ -230,7 +226,6 @@ buttonValidation.addEventListener("click", (event) => {
     },
     products: idProducts
   }
-  console.log(order);
     //Envoie des données au serveur
     const options = {
       method: 'POST',
@@ -255,6 +250,6 @@ buttonValidation.addEventListener("click", (event) => {
         alert("Il y a un problème avec le fetch-order : " + error.message);
       });
   } else {
-    console.log("Le formulaire n'est pas valide!");
+    alert("Le formulaire n'est pas valide!");
   }
 })

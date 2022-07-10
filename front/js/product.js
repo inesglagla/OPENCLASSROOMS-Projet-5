@@ -36,7 +36,6 @@ fetch('http://localhost:3000/api/products/'+id)
                 let buttonColor = productCouleurPlacement;
                 buttonColor.addEventListener('input', (ec) => {
                     colorItem = ec.target.value;
-                    console.log(colorItem);
                 })
             }
         //Fermeture de la partie couleur
@@ -49,7 +48,6 @@ fetch('http://localhost:3000/api/products/'+id)
             let buttonQuantity = productQuantité[i];
             buttonQuantity.addEventListener('input', (eq) => {
                 productQuantityAll = eq.target.value;
-                console.log(productQuantityAll);
             })
         }
     //Ajouter le produit au panier
@@ -78,7 +76,6 @@ fetch('http://localhost:3000/api/products/'+id)
                     addProductCart = [];
                     addProductCart.push(productData);
                     localStorage.setItem("panier", JSON.stringify(addProductCart));
-                    console.log(addProductCart);
             //Si le panier existe, on suit la condition suivante
             } else {
                     //Variable pour montrer que le panier existe et contient un produit au minimum
@@ -91,13 +88,11 @@ fetch('http://localhost:3000/api/products/'+id)
                             //Si ils sont pareils, on ajoute uniquement la quantité au panier
                             let addQuantity = parseInt(productData.productQuantity) + parseInt(productFind.productQuantity);
                             productFind.productQuantity = JSON.stringify(addQuantity);
-                            console.log("On a ajouté la nouvelle quantité");
                             return (localStorage.panier = JSON.stringify(productsAdded));
                         } //Si la couleur et l'ID sont différents, on ajoute le produit au panier
                         else {
                         addProductCart.push(productData);
                         localStorage.setItem("panier", JSON.stringify(addProductCart));
-                        console.log("On a ajouté le nouveau produit")
                         }
                     
                 }
